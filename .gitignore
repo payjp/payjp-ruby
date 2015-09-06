@@ -1,0 +1,7 @@
+/payjp-*.gem
+/Gemfile.lock
+.rvmrc
+Gemfile.lock
+.idea/*
+.ruby-version
+pkg/*

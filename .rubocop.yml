@@ -1,0 +1,82 @@
+inherit_from: .rubocop_todo.yml
+
+Style/PerlBackrefs:
+  Enabled: false
+
+Style/IndentHash:
+  Enabled: false
+
+Style/StringLiterals:
+  Enabled: false
+
+Style/DeprecatedHashMethods:
+  Enabled: false
+
+Style/RaiseArgs:
+  Enabled: false
+
+Style/SignalException:
+  Enabled: false
+
+Style/NumericLiterals:
+  MinDigits: 11
+
+Style/ClassAndModuleChildren:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
+
+Metrics/AbcSize:
+  Max: 45
+
+Metrics/ClassLength:
+  Max: 376
+
+Metrics/CyclomaticComplexity:
+  Max: 16
+
+Metrics/LineLength:
+  Max: 315
+
+Metrics/MethodLength:
+  Max: 63
+
+Metrics/ModuleLength:
+  Max: 265
+
+Metrics/ParameterLists:
+  Max: 6
+
+Metrics/PerceivedComplexity:
+  Max: 20
+
+Style/GuardClause:
+  MinBodyLength: 4
+
+Style/FileName:
+  Exclude:
+  - '**/payjp-console'
+
+Style/RescueModifier:
+  Enabled: false
+
+#######################
+# for ruby 1.8.7
+#######################
+# Configuration parameters: WordRegex.
+Style/WordArray:
+  MinSize: 2
+
+# Configuration parameters: SupportedStyles, UseHashRocketsWithSymbolValues.
+Style/HashSyntax:
+  EnforcedStyle: hash_rockets
+
+Style/Lambda:
+  Enabled: false
+
+Style/EachWithObject:
+  Enabled: false
+
+Style/DotPosition:
+  Enabled: false
