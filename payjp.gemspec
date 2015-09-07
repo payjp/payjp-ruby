@@ -6,10 +6,10 @@ Gem::Specification.new do |s|
   s.name = 'payjp'
   s.version = Payjp::VERSION
   s.summary = 'Ruby bindings for the Payjp API'
-  s.description = 'Payjp is the easiest way to accept payments online.  See https://pay.jp for details.'
+  s.description = 'PAY.JP is the easiest way to accept payments online.'
   s.authors = ['PAY.JP']
   s.email = ['support@pay.jp']
-  s.homepage = 'https://pay.jp/api'
+  s.homepage = 'https://pay.jp'
   s.license = 'MIT'
 
   s.add_dependency('rest-client', '~> 1.4')

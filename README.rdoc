@@ -9,7 +9,7 @@
 You don't need this source code unless you want to modify the gem. If
 you just want to use the Payjp Ruby bindings, you should run:
 
-  gem install payjp (準備中)
+  gem install payjp
 
 If you want to build the gem from source:
 
