@@ -6,7 +6,7 @@ Gem::Specification.new do |s|
   s.name = 'payjp'
   s.version = Payjp::VERSION
   s.summary = 'Ruby bindings for the Payjp API'
-  s.description = 'PAY.JP is the easiest way to accept payments online.'
+  s.description = 'PAY.JP makes it way easier and less expensive to accept payments.'
   s.authors = ['PAY.JP']
   s.email = ['support@pay.jp']
   s.homepage = 'https://pay.jp'
