@@ -174,7 +174,7 @@ module Payjp
   def self.request_headers(api_key)
     headers = {
       :user_agent => "Payjp/v1 RubyBindings/#{Payjp::VERSION}",
-      :authorization => "Basic #{Base64.encode64("#{api_key}:")}",
+      :authorization => "Basic #{Base64.strict_encode64("#{api_key}:")}",
       :content_type => 'application/x-www-form-urlencoded'
     }
 
