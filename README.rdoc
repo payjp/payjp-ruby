@@ -2,7 +2,7 @@
 
 == Documentation
 
-{PAY.JP API Docs}[http://pay.readme.io/v1.0/docs]
+{PAY.JP API Docs}[https://pay.jp/docs/api/]
 
 == Installation
 
