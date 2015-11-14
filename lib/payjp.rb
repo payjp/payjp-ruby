@@ -45,17 +45,28 @@ require 'payjp/errors/authentication_error'
 
 module Payjp
   @api_base = 'https://api.pay.jp'
+  @open_timeout = 30
+  @read_timeout = 80
+  @ssl_ca_file = nil
+  @ssl_ca_path = nil
+  @ssl_cert_store = nil
 
   class << self
-    attr_accessor :api_key, :api_base, :api_version, :connect_base, :uploads_base
+    attr_accessor :api_key, :api_base, :api_version, :connect_base, :uploads_base,
+                  :open_timeout, :read_timeout, :ssl_ca_file, :ssl_ca_path, :ssl_cert_store
   end
 
   def self.api_url(url = '', api_base_url = nil)
     (api_base_url || @api_base) + url
   end
 
-  def self.request(method, url, api_key, params = {}, headers = {}, api_base_url = nil)
+  def self.request(method, url, api_key, params = {}, headers = {}, api_base_url = nil, open_timeout = nil, read_timeout = nil, ssl_ca_file = nil, ssl_ca_path = nil, ssl_cert_store = nil)
     api_base_url ||= @api_base
+    open_timeout ||= @open_timeout
+    read_timeout ||= @read_timeout
+    ssl_ca_file ||= @ssl_ca_file
+    ssl_ca_path ||= @ssl_ca_path
+    ssl_cert_store ||= @ssl_cert_store
 
     unless api_key ||= @api_key
       raise AuthenticationError.new('No API key provided. ' \
@@ -91,8 +102,10 @@ module Payjp
     end
 
     request_opts.update(:headers => request_headers(api_key).update(headers),
-                        :method => method, :open_timeout => 30,
-                        :payload => payload, :url => url, :timeout => 80)
+                        :method => method, :payload => payload, :url => url,
+                        :open_timeout => open_timeout, :read_timeout => read_timeout,
+                        :ssl_ca_file => ssl_ca_file, :ssl_ca_path => ssl_ca_path,
+                        :ssl_cert_store => ssl_cert_store)
 
     begin
       # $stderr.puts request_opts
