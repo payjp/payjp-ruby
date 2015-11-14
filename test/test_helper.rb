@@ -29,7 +29,7 @@ class Test::Unit::TestCase
   include Mocha
 
   def encode_credentials(user_name)
-    "Basic #{Base64.encode64("#{user_name}:")}"
+    "Basic #{Base64.strict_encode64("#{user_name}:")}"
   end
 
   setup do
