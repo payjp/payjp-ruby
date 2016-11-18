@@ -14,10 +14,12 @@ Gem::Specification.new do |s|
 
   s.add_dependency('rest-client', '~> 2.0')
 
-  s.add_development_dependency('mocha', '~> 0.13.2')
-  s.add_development_dependency('shoulda', '~> 3.4.0')
-  s.add_development_dependency('test-unit')
-  s.add_development_dependency('rake')
+  s.add_development_dependency('mocha', '~> 1.2.1')
+  s.add_development_dependency('activesupport', ['< 5.0', '~> 4.2.7'])
+  s.add_development_dependency('shoulda', '~> 3.3.2')
+  s.add_development_dependency('test-unit', '~> 3.2.2')
+  s.add_development_dependency('rake', '~> 11.3.0')
+  s.add_development_dependency('bundler', '>= 1.7.6')
 
   s.files = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- test/*`.split("\n")
