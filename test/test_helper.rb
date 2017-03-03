@@ -2,7 +2,6 @@ require 'payjp'
 require 'test/unit'
 require 'mocha/setup'
 require 'stringio'
-require 'shoulda'
 require File.expand_path('../test_data', __FILE__)
 
 # monkeypatch request methods
@@ -27,6 +26,11 @@ end
 class Test::Unit::TestCase
   include Payjp::TestData
   include Mocha
+
+  class << self
+    alias_method :context, :sub_test_case
+    alias_method :should, :test
+  end
 
   def encode_credentials(user_name)
     "Basic #{Base64.strict_encode64("#{user_name}:")}"
