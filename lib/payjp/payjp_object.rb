@@ -129,7 +129,7 @@ module Payjp
         # remove keys at the server, but not known locally
         if @original_values.include?(key)
           keys_to_unset = @original_values[key].keys - new_keys
-          keys_to_unset.each { |key| update[key] = '' }
+          keys_to_unset.each { |unset_key| update[unset_key] = '' }
         end
 
         update
