@@ -30,5 +30,17 @@ module Payjp
       assert_raise { Payjp::Util.normalize_opts(nil) }
       assert_raise { Payjp::Util.normalize_opts(:api_key => nil) }
     end
+
+    should "url_encode should escape only UNRESERVED characters" do
+      unreserved = %q|!'()*-.0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz~|
+      (0..255).each do |c|
+        s = [c].pack("C")
+        if unreserved.include?(s)
+          assert_equal(s, Payjp::Util.url_encode(s))
+        else
+          assert_equal("%"+sprintf("%02X", c), Payjp::Util.url_encode(s))
+        end
+      end
+    end
   end
 end
