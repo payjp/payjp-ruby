@@ -62,7 +62,16 @@ module Payjp
     end
 
     def self.url_encode(key)
-      URI.escape(key.to_s, Regexp.new("[^#{URI::PATTERN::UNRESERVED}]"))
+      # URI.escape is obsolete, so just use the code fragment in URI library
+      # (from URI::RFC2396_Parser#escape)
+      key.to_s.gsub(Regexp.new("[^#{URI::PATTERN::UNRESERVED}]")) do
+        us = $&
+        tmp = ''
+        us.each_byte do |uc|
+          tmp << sprintf('%%%02X', uc)
+        end
+        tmp
+      end.force_encoding(Encoding::US_ASCII)
     end
 
     def self.flatten_params(params, parent_key = nil)
