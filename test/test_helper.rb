@@ -11,6 +11,7 @@ module Payjp
 
   class << self
     attr_writer :mock_rest_client
+    remove_method :execute_request
   end
 
   def self.execute_request(opts)
