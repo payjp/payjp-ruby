@@ -79,5 +79,17 @@ module Payjp
       })
       assert c.paid
     end
+
+    should "charges should be reauthable" do
+      now = Time.now.localtime("+09:00")
+      expired_at = now + 60 * 60 * 24 * 6
+      expired_at = Time.new(expired_at.year, expired_at.mon, expired_at.day, 23, 59, 59, now.utc_offset)
+      @mock.expects(:get).never
+      @mock.expects(:post).once.returns(test_response({ :id => "ch_test_charge", :expired_at => expired_at.to_i }))
+
+      c = Payjp::Charge.new("test_charge")
+      c.reauth
+      assert_equal expired_at.to_i, c.expired_at
+    end
   end
 end

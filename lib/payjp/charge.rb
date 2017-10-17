@@ -14,6 +14,11 @@ module Payjp
       refresh_from(response, opts)
     end
 
+    def reauth(params = {}, opts = {})
+      response, opts = request(:post, reauth_url, params, opts)
+      refresh_from(response, opts)
+    end
+
     private
 
     def refund_url
@@ -22,6 +27,10 @@ module Payjp
 
     def capture_url
       url + '/capture'
+    end
+
+    def reauth_url
+      url + '/reauth'
     end
   end
 end
