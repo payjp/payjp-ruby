@@ -46,7 +46,7 @@ require 'payjp/errors/authentication_error'
 module Payjp
   @api_base = 'https://api.pay.jp'
   @open_timeout = 30
-  @read_timeout = 80
+  @read_timeout = 90
   @ssl_ca_file = nil
   @ssl_ca_path = nil
   @ssl_cert_store = nil
@@ -270,7 +270,8 @@ module Payjp
 
     case e
     when RestClient::RequestTimeout
-      message = "Could not connect to Payjp (#{api_base_url}). #{connection_message}"
+      message = "Timed out over #{@read_timeout} sec. " \
+        "Check if your request successed or not."
 
     when RestClient::ServerBrokeConnection
       message = "The connection to the server (#{api_base_url}) broke before the " \
@@ -278,8 +279,7 @@ module Payjp
 
     when SocketError
       message = "Unexpected error communicating when trying to connect to Payjp. " \
-        "You may be seeing this message because your DNS is not working. " \
-        "To check, try running 'host pay.jp' from the command line."
+        "Your DNS may not work. Check 'host api.pay.jp' from the command line."
 
     else
       message = "Unexpected error communicating with Payjp. " \
