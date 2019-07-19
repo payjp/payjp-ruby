@@ -266,7 +266,7 @@ module Payjp
     api_base_url = @api_base unless api_base_url
     connection_message = "Please check your internet connection and try again. " \
         "If this problem persists, you should check Payjp's service status at " \
-        "https://twitter.com/payjpstatus, or let us know at support@pay.jp."
+        "https://status.pay.jp or let us know at support@pay.jp."
 
     case e
     when RestClient::RequestTimeout
