@@ -1,0 +1,35 @@
+require File.expand_path('../../test_helper', __FILE__)
+
+module Payjp
+  class TenantTest < Test::Unit::TestCase
+    should "tenants should be listable" do
+      @mock.expects(:get).once.returns(test_response(test_tenant_array))
+      t = Payjp::Tenant.all.data
+      assert t.is_a? Array
+      assert t[0].is_a? Payjp::Tenant
+    end
+
+    should "tenants should be deletable" do
+      @mock.expects(:delete).once.returns(test_response(test_tenant({ deleted: true })))
+      t = Payjp::Tenant.new("test_tenant")
+      t.delete
+      assert t.deleted
+    end
+
+    should "tenants should be updateable" do
+      @mock.expects(:get).once.returns(test_response(test_tenant({ mnemonic: "foo" })))
+      @mock.expects(:post).once.returns(test_response(test_tenant({ mnemonic: "bar" })))
+      t = Payjp::Tenant.new("test_tenant").refresh
+      assert_equal "foo", t.mnemonic
+      t.mnemonic = "bar"
+      t.save
+      assert_equal "bar", t.mnemonic
+    end
+
+    should "create should return a new tenant" do
+      @mock.expects(:post).once.returns(test_response(test_tenant))
+      t = Payjp::Tenant.create
+      assert_equal "t_test_tenant", t.id
+    end
+  end
+end
