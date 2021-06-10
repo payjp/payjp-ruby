@@ -34,6 +34,7 @@ require 'payjp/event'
 require 'payjp/transfer'
 require 'payjp/card'
 require 'payjp/subscription'
+require 'payjp/tenant'
 
 # Errors
 require 'payjp/errors/payjp_error'
