@@ -411,6 +411,25 @@ module Payjp
 
           assert_equal true, rescued
         end
+
+        should "429s should raise a APIError of over capacity error code" do
+          response = test_response(test_over_capacity_error, 429)
+          @mock.expects(:get).once.raises(RestClient::ExceptionWithResponse.new(response, 429))
+
+          rescued = false
+          begin
+            Payjp::Customer.new("test_customer").refresh
+            assert false # shouldn't get here either
+          rescue Payjp::APIError => e # we don't use assert_raises because we want to examine e
+            rescued = true
+            assert e.is_a? Payjp::APIError
+            assert_equal(429, e.http_status)
+            assert_equal(true, !!e.http_body)
+            assert_equal("over_capacity", e.json_body[:error][:code])
+          end
+
+          assert_equal true, rescued
+        end
       end
 
       should 'save nothing if nothing changes' do
@@ -440,6 +459,122 @@ module Payjp
         ch.customer.description = 'Bob'
         ch.save
       end
+    end
+  end
+
+  class APIRequestorRetryTest < Test::Unit::TestCase
+
+    setup do
+      Payjp.max_retry = 0
+      Payjp.retry_initial_delay = 0.1
+    end
+
+    def mock_exceptions(error_codes, call_count)
+      exception_mock = nil
+      error_codes.with_index(1) { |code, id|
+        if id == 1
+          exception_mock = @mock.expects(:get).raises(RestClient::ExceptionWithResponse.new(test_response(test_api_error, code)))
+        else
+          exception_mock = exception_mock.then.raises(RestClient::ExceptionWithResponse.new(test_response(test_api_error, code)))
+        end
+      }
+      exception_mock.at_least(call_count)
+    end
+
+    context "checking retry" do
+      should "over capacity retry disabled" do
+        error_codes = [429, 599].to_enum
+        # returns 599 at 2nd try but max_retry 0 then retry disabled
+        mock_exceptions(error_codes, 1)
+        rescued = false
+
+        begin
+          Payjp::Charge.retrieve("test_charge")
+        rescue Payjp::APIError => e # we don't use assert_raises because we want to examine e
+          assert e.is_a? Payjp::APIError
+          assert_equal(429, e.http_status)
+          rescued = true
+        end
+        assert_equal true, rescued
+      end
+
+      should "no retry" do
+        Payjp.max_retry = 2
+        Payjp.retry_initial_delay = 0.1
+        error_codes = [599, 429, 429, 429].to_enum
+        # returns 599 at first try
+        mock_exceptions(error_codes, 1)
+        rescued = false
+
+        begin
+          Payjp::Charge.retrieve("test_charge")
+        rescue Payjp::APIError => e # we don't use assert_raises because we want to examine e
+          assert e.is_a? Payjp::APIError
+          assert_equal(599, e.http_status)
+          assert_equal(true, !!e.http_body)
+          rescued = true
+        end
+        assert_equal true, rescued
+      end
+
+      should "over capacity full retry" do
+        Payjp.max_retry = 2
+        Payjp.retry_initial_delay = 0.1
+        error_codes = [429, 429, 429, 429, 599].to_enum
+
+        # first try + 2 retries + unexpected 599
+        mock_exceptions(error_codes, 3)
+        rescued = false
+
+        begin
+          Payjp::Charge.retrieve("test_charge")
+        rescue Payjp::APIError => e # we don't use assert_raises because we want to examine e
+          assert e.is_a? Payjp::APIError
+          assert_equal(429, e.http_status)
+          rescued = true
+        end
+
+        assert_equal true, rescued
+      end
+
+      should "over capacity halfway of retries" do
+        Payjp.max_retry = 5
+        Payjp.retry_initial_delay = 0.1
+
+        error_codes = [429, 599, 429, 429, 429].to_enum
+        rescued = false
+
+        # returns not 429 status at 2nd try
+        mock_exceptions(error_codes, 2)
+        begin
+          Payjp::Charge.retrieve("test_charge")
+        rescue Payjp::APIError => e # we don't use assert_raises because we want to examine e
+          assert e.is_a? Payjp::APIError
+          assert_equal(599, e.http_status)
+          rescued = true
+        end
+
+        assert_equal true, rescued
+      end
+    end
+
+    context "retry interval" do
+      should "retry initial delay" do
+        retry_initial_delay = 2
+        retry_max_delay = 32
+
+        assert_equal(true, Payjp.get_retry_delay(0, retry_initial_delay, retry_max_delay).between?(1, 2))
+        assert_equal(true, Payjp.get_retry_delay(1, retry_initial_delay, retry_max_delay).between?(2, 4))
+        assert_equal(true, Payjp.get_retry_delay(2, retry_initial_delay, retry_max_delay).between?(4, 8))
+        # cap
+        assert_equal(true, Payjp.get_retry_delay(4, retry_initial_delay, retry_max_delay).between?(16, 32))
+        assert_equal(true, Payjp.get_retry_delay(10, retry_initial_delay, retry_max_delay).between?(16, 32))
+      end
+    end
+
+    teardown do
+      Payjp.max_retry = 0
+      Payjp.retry_initial_delay = 0.1
     end
   end
 end

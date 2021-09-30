@@ -50,23 +50,39 @@ module Payjp
   @ssl_ca_file = nil
   @ssl_ca_path = nil
   @ssl_cert_store = nil
+  @max_retry = 0
+  @retry_initial_delay = 2
+  @retry_max_delay = 32
 
   class << self
     attr_accessor :api_key, :api_base, :api_version, :connect_base, :uploads_base,
-                  :open_timeout, :read_timeout, :ssl_ca_file, :ssl_ca_path, :ssl_cert_store
+                  :open_timeout, :read_timeout, :ssl_ca_file, :ssl_ca_path, :ssl_cert_store, :max_retry, :retry_initial_delay, :retry_max_delay
   end
 
   def self.api_url(url = '', api_base_url = nil)
     (api_base_url || @api_base) + url
   end
 
-  def self.request(method, url, api_key, params = {}, headers = {}, api_base_url = nil, open_timeout = nil, read_timeout = nil, ssl_ca_file = nil, ssl_ca_path = nil, ssl_cert_store = nil)
+  def self.get_retry_delay(retry_count, retry_initial_delay, retry_max_delay)
+    # Get retry delay seconds.
+    # Based on "Exponential backoff with equal jitter" algorithm.
+    # https://aws.amazon.com/jp/blogs/architecture/exponential-backoff-and-jitter/
+
+    wait = [retry_max_delay, retry_initial_delay * 2 ** retry_count].min
+    random = Random.new()
+    (wait / 2) + (random.rand(wait / 2.0))
+  end
+
+  def self.request(method, url, api_key, params = {}, headers = {}, api_base_url = nil, open_timeout = nil, read_timeout = nil, ssl_ca_file = nil, ssl_ca_path = nil, ssl_cert_store = nil, max_retry = nil, retry_initial_delay= nil, retry_max_delay = nil)
     api_base_url ||= @api_base
     open_timeout ||= @open_timeout
     read_timeout ||= @read_timeout
     ssl_ca_file ||= @ssl_ca_file
     ssl_ca_path ||= @ssl_ca_path
     ssl_cert_store ||= @ssl_cert_store
+    max_retry ||= @max_retry
+    retry_initial_delay ||= @retry_initial_delay
+    retry_max_delay ||= @retry_max_delay
 
     unless api_key ||= @api_key
       raise AuthenticationError.new('No API key provided. ' \
@@ -107,6 +123,8 @@ module Payjp
                         :ssl_ca_file => ssl_ca_file, :ssl_ca_path => ssl_ca_path,
                         :ssl_cert_store => ssl_cert_store)
 
+    retry_count = 1
+
     begin
       # $stderr.puts request_opts
 
@@ -122,6 +140,12 @@ module Payjp
         raise
       end
     rescue RestClient::ExceptionWithResponse => e
+      if e.http_code == 429 and retry_count <= max_retry then
+        sleep get_retry_delay(retry_count, retry_initial_delay, retry_max_delay)
+        retry_count += 1
+        retry
+      end
+
       if rcode = e.http_code and rbody = e.http_body
         handle_api_error(rcode, rbody)
       else
@@ -239,6 +263,8 @@ module Payjp
       raise authentication_error error, rcode, rbody, error_obj
     when 402
       raise card_error error, rcode, rbody, error_obj
+    when 429
+      raise api_error error, rcode, rbody, error_obj
     else
       raise api_error error, rcode, rbody, error_obj
     end
