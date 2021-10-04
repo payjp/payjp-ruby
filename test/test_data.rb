@@ -287,5 +287,14 @@ module Payjp
         }
       }
     end
+
+    def test_over_capacity_error
+      {
+        :error => {
+          :code => "over_capacity",
+          :type => "api_error"
+        }
+      }
+    end
   end
 end
