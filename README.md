@@ -41,6 +41,34 @@ gem build payjp.gemspec
 * Ruby 2.0.0 or above.
 * rest-client
 
+### Retry on HTTP Status Code 429
+* See [Rate Limit Guideline](https://pay.jp/docs/guideline-rate-limit#2-%E3%83%AA%E3%83%88%E3%83%A9%E3%82%A4)
+* When you exceeded rate-limit, you can retry request by setting `max_retry`
+  like `Payjp.max_retry = 3` .
+* The retry interval base value is `retry_initial_delay`
+  Adjust the value like `Payjp.retry_initial_delay = 4`
+  The smaller is shorter.
+* The Maximum retry time is `retry_max_delay`.
+  Adjust the value like 'Payjp.retry_max_delay = 32' 
+* The retry interval calcurating is based on "Exponential backoff with equal jitter" algorithm.
+  See https://aws.amazon.com/jp/blogs/architecture/exponential-backoff-and-jitter/
+
+how to use
+
+```ruby
+require 'payjp'
+Payjp.api_key = 'sk_test_c62fade9d045b54cd76d7036'
+Payjp.max_retry = 3
+Payjp.retry_initial_delay = 2
+Payjp.retry_max_delay = 32
+
+charge = Payjp::Charge.create(
+  :amount => 3500,
+  :card => 'token_id',
+  :currency => 'jpy',
+)
+```
+
 ### Bundler
 
 If you are installing via bundler, you should be sure to use the https
