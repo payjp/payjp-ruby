@@ -25,6 +25,7 @@ module Payjp
         'card' => Card,
         'charge' => Charge,
         'customer' => Customer,
+        'tenant' => Tenant,
         'event' => Event,
         'plan' => Plan,
         'subscription' => Subscription,

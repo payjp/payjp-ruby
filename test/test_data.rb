@@ -250,6 +250,35 @@ module Payjp
       }
     end
 
+    def test_tenant(params = {})
+      {
+        :created => 1433127983,
+        :name => "test",
+        :id => "test",
+        :livemode => false,
+        :metadata => nil,
+        :object => "tenant",
+        :platform_fee_rate => "10.15",
+        :payjp_fee_included => false,
+        :minimum_transfer_amount => 1000,
+        :bank_account_number => "0001000",
+        :bank_branch_code => "000",
+        :bank_code => "0000",
+        :bank_account_holder_name => "ヤマダ タロウ",
+        :bank_account_type => "普通",
+        :bank_account_status => "pending"
+      }.merge(params)
+    end
+
+    def test_tenant_array
+      {
+        :count => 3,
+        :data => [test_tenant, test_tenant, test_tenant],
+        :object => 'list',
+        :url => '/v1/tenants'
+      }
+    end
+
     def test_invalid_api_key_error
       {
         :error => {
