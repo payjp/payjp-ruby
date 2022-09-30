@@ -91,5 +91,17 @@ module Payjp
       c.reauth
       assert_equal expired_at.to_i, c.expired_at
     end
+
+    should "charges should be three_d_secure finishable" do
+      @mock.expects(:get).never
+      @mock.expects(:post).with do |url, api_key, params|
+        url == "#{Payjp.api_base}/v1/charges/test_charge/tds_finish" && api_key.nil? && CGI.parse(params) == {}
+      end.once.returns(test_response({ :id => "test_charge", :paid => true, :captured => true }))
+
+      c = Payjp::Charge.new("test_charge")
+      c.tds_finish
+      assert c.paid
+      assert c.captured
+    end
   end
 end

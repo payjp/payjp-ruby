@@ -19,6 +19,11 @@ module Payjp
       refresh_from(response, opts)
     end
 
+    def tds_finish(params = {}, opts = {})
+      response, opts = request(:post, tds_finish_url, params, opts)
+      refresh_from(response, opts)
+    end
+
     private
 
     def refund_url
@@ -31,6 +36,10 @@ module Payjp
 
     def reauth_url
       url + '/reauth'
+    end
+
+    def tds_finish_url
+      url + '/tds_finish'
     end
   end
 end
