@@ -18,5 +18,5 @@ jobs:
           bundler-cache: true
       - name: Build and publish
         env:
-          RUBYGEMS_API_KEY: ${{ secrets.RUBYGEMS_API_KEY }}
-        run: sh publish.sh
+          GEM_HOST_API_KEY: ${{ secrets.RUBYGEMS_API_KEY }}
+        run: bundle exec rake release
