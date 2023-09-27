@@ -33,6 +33,7 @@ require 'payjp/token'
 require 'payjp/event'
 require 'payjp/transfer'
 require 'payjp/card'
+require 'payjp/statement'
 require 'payjp/subscription'
 require 'payjp/tenant'
 
