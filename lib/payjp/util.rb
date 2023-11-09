@@ -28,6 +28,7 @@ module Payjp
         'tenant' => Tenant,
         'event' => Event,
         'plan' => Plan,
+        'statement' => Statement,
         'subscription' => Subscription,
         'token' => Token,
         'transfer' => Transfer

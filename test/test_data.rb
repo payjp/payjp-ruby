@@ -325,5 +325,49 @@ module Payjp
         }
       }
     end
+
+    def test_statement(params = {})
+      {
+        :created => 1695620296,
+        :id => "st_test",
+        :items => [
+            {
+                :amount => 282358654,
+                :name => "売上",
+                :subject => "gross_sales",
+                :tax_rate => "0.00"
+            },
+            {
+                :amount => -65699624,
+                :name => "返金",
+                :subject => "gross_refund",
+                :tax_rate => "0.00"
+            },
+            {
+                :amount => -7054912,
+                :name => "決済手数料",
+                :subject => "fee",
+                :tax_rate => "0.10"
+            },
+            {
+                :amount => 1644315,
+                :name => "返金による手数料返還",
+                :subject => "refund_fee_offset",
+                :tax_rate => "0.10"
+            }
+        ],
+        :object => "statement",
+        :title => nil
+      }.merge(params)
+    end
+
+    def test_statement_array
+      {
+        :count => 2,
+        :data => [test_statement, test_statement],
+        :object => 'list',
+        :url => '/v1/statements'
+      }
+    end
   end
 end
