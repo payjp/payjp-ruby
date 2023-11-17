@@ -235,7 +235,9 @@ module Payjp
           :charge_gross => 1000,
           :net => 1000,
           :refund_amount => 0,
-          :refund_count => 0
+          :refund_count => 0,
+          :dispute_amount => 0,
+          :dispute_count => 0
         },
         :metadata => {}
       }.merge(params)
