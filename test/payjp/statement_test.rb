@@ -22,11 +22,11 @@ module Payjp
       assert statement.items[0].to_hash.has_key?(:tax_rate)
     end
 
-    should "create_statement_urls should be callable" do
+    should "statement_urls should be callable" do
       @mock.expects(:get).never
       @mock.expects(:post).once.returns(test_response({ :object => "statement_url", :url => 'https://pay.jp/_/statements/8f9ec721bc734dbcxxxxxxxxxxxxxxxx', :expires => 1476676539 }))
       c = Payjp::Statement.new('st_test')
-      response = c.create_statement_urls()
+      response = c.statement_urls()
       assert_equal response[:url], 'https://pay.jp/_/statements/8f9ec721bc734dbcxxxxxxxxxxxxxxxx'
     end
   end
