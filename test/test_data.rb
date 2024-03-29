@@ -371,5 +371,57 @@ module Payjp
         :url => '/v1/statements'
       }
     end
+
+    def test_term_array
+      {
+        :count => 3,
+        :data => [test_term, test_term, test_term],
+        :object => 'list',
+        :url => '/v1/terms'
+      }
+    end
+
+    def test_term(params = {})
+      {
+        :created => 1438354800,
+        :id => "tm_test_term",
+        :livemode => false,
+        :object => "term",
+        :charge_count => 158,
+        :refund_count => 25,
+        :dispute_count => 2,
+        :end_at => 1439650800,
+        :start_at => 1438354800
+      }.merge(params)
+    end
+
+    def test_balance_array
+      {
+        :count => 3,
+        :data => [test_balance, test_balance, test_balance],
+        :object => 'list',
+        :url => '/v1/terms'
+      }
+    end
+
+    def test_balance(params = {})
+      {
+        :created => 1438354800,
+        :id => 'ba_test_balance',
+        :livemode => false,
+        :net => 1000,
+        :object => 'balance',
+        :type => 'collecting',
+        :statements => {
+          :count => 2,
+          :data => [test_statement,test_statement],
+          :object => 'list',
+          :url => '/v1/statements'
+        },
+        :closed => false,
+        :due_date => nil,
+        :bank_info => nil
+      }.merge(params)
+    end
   end
 end
