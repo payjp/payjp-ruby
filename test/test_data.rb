@@ -359,7 +359,9 @@ module Payjp
             }
         ],
         :object => "statement",
-        :title => nil
+        :title => nil,
+        :tenant_id => nil,
+        :updated => 1695892351
       }.merge(params)
     end
 
@@ -383,7 +385,6 @@ module Payjp
 
     def test_term(params = {})
       {
-        :created => 1438354800,
         :id => "tm_test_term",
         :livemode => false,
         :object => "term",
@@ -411,7 +412,8 @@ module Payjp
         :livemode => false,
         :net => 1000,
         :object => 'balance',
-        :type => 'collecting',
+        :state => 'collecting',
+        :tenant_id => nil,
         :statements => {
           :count => 2,
           :data => [test_statement,test_statement],
