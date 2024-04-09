@@ -22,6 +22,7 @@ module Payjp
 
         # business objects
         'account' => Account,
+        'balance' => Balance,
         'card' => Card,
         'charge' => Charge,
         'customer' => Customer,
@@ -30,6 +31,7 @@ module Payjp
         'plan' => Plan,
         'statement' => Statement,
         'subscription' => Subscription,
+        'term' => Term,
         'token' => Token,
         'transfer' => Transfer
       }

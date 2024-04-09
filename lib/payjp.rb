@@ -36,6 +36,8 @@ require 'payjp/card'
 require 'payjp/statement'
 require 'payjp/subscription'
 require 'payjp/tenant'
+require 'payjp/term'
+require 'payjp/balance'
 
 # Errors
 require 'payjp/errors/payjp_error'
