@@ -28,5 +28,13 @@ module Payjp
       assert response.resource_id == resource_id
       assert response.tenant_id == tenant_id
     end
+
+    should "three_d_secure_requests should be retrievable" do
+      tdsr_id = 'tdsr_xxx_test1'
+      @mock.expects(:get).once.returns(test_response(test_three_d_secure_request({:id => tdsr_id})))
+      response = Payjp::ThreeDSecureRequest.retrieve(tdsr_id)
+      assert_equal Payjp::ThreeDSecureRequest, response.class
+      assert_equal response.id, tdsr_id
+    end
   end
 end
