@@ -33,7 +33,8 @@ module Payjp
         'subscription' => Subscription,
         'term' => Term,
         'token' => Token,
-        'transfer' => Transfer
+        'transfer' => Transfer,
+        'three_d_secure_request' => ThreeDSecureRequest
       }
     end
 

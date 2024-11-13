@@ -425,5 +425,31 @@ module Payjp
         :bank_info => nil
       }.merge(params)
     end
+
+    def test_three_d_secure_request(params = {})
+      {
+        :created => 1730084767,
+        :expired_at => nil,
+        :finished_at => nil,
+        :id => "tdsr_xxx",
+        :livemode => true,
+        :object => "three_d_secure_request",
+        :resource_id => "car_xxx",
+        :result_received_at => nil,
+        :started_at => nil,
+        :state => "created",
+        :tenant_id => nil,
+        :three_d_secure_status => "unverified",
+      }.merge(params)
+    end
+
+    def test_three_d_secure_request_array
+      {
+        :count => 3,
+        :data => [test_three_d_secure_request({:id=>'tdsr_xxx1'}), test_three_d_secure_request({:id=>'tdsr_xxx2'}), test_three_d_secure_request({:id=>'tdsr_xxx3'})],
+        :object => 'list',
+        :url => '/v1/three_d_secure_requests'
+      }
+    end
   end
 end
