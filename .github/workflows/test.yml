@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-20.04
     strategy:
       matrix:
-        ruby-version: [2.2, 2.3.0, 2.7.0, 3.3.6, jruby-9.2.17.0]
+        ruby-version: [2.7.0, 3.3.6, jruby-9.2.17.0]
     steps:
       - uses: actions/checkout@v3
       - name: Set up Ruby ${{ matrix.ruby-version }}
