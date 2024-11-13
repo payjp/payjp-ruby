@@ -16,8 +16,8 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency('mocha', '~> 1.2.1')
   s.add_development_dependency('activesupport', ['< 5.0', '~> 4.2.7'])
-  s.add_development_dependency('test-unit', '~> 3.2.2')
-  s.add_development_dependency('rake', '~> 11.3.0')
+  s.add_development_dependency('test-unit', '~> 3.6.2')
+  s.add_development_dependency('rake', '>= 11.3.0')
   s.add_development_dependency('bundler', '>= 1.7.6')
 
   s.files = `git ls-files`.split("\n")
