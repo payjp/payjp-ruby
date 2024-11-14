@@ -30,5 +30,24 @@ module Payjp
         token.delete
       end
     end
+
+    should "token should be able to request tds_finish" do
+      token_id = 'tok_tds_token1'
+      @mock.expects(:post).once.returns(test_response(test_token({:id => token_id})))
+      token = Payjp::Token.new(token_id)
+      response = token.tds_finish()
+
+      assert_equal Payjp::Token, response.class
+      assert_equal token_id, response.id
+    end
+
+    should "token should be able to request tds_finish from class method" do
+      token_id = 'tok_tds_token2'
+      @mock.expects(:post).once.returns(test_response(test_token({:id => token_id})))
+      response = Payjp::Token.tds_finish(token_id)
+
+      assert_equal Payjp::Token, response.class
+      assert_equal token_id, response.id
+    end
   end
 end

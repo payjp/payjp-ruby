@@ -38,6 +38,7 @@ require 'payjp/subscription'
 require 'payjp/tenant'
 require 'payjp/term'
 require 'payjp/balance'
+require 'payjp/three_d_secure_request'
 
 # Errors
 require 'payjp/errors/payjp_error'
