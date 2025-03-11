@@ -71,7 +71,7 @@ module Payjp
       # (from URI::RFC2396_Parser#escape)
       key.to_s.gsub(Regexp.new("[^#{URI::PATTERN::UNRESERVED}]")) do
         us = $&
-        tmp = ''
+        tmp = String.new
         us.each_byte do |uc|
           tmp << sprintf('%%%02X', uc)
         end
