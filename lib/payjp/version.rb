@@ -1,3 +1,3 @@
 module Payjp
-  VERSION = '0.0.16'
+  VERSION = '1.1.7'
 end
